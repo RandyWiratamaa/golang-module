@@ -2,7 +2,9 @@ package helper
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -120,4 +122,146 @@ func BenchmarkHelloWorldTable(b *testing.B) {
 			}
 		})
 	}
+}
+
+/**
+GOROUTINE
+**/
+
+func RunHelloWorld() {
+	fmt.Println("Hello World")
+}
+
+func TestGoroutine(t *testing.T) {
+	go RunHelloWorld() //Goroutine diawali dengan kata kunci 'go', akan running secara asynchronous. Tidak perlu menunggu proses selesai
+	fmt.Println("Ups")
+
+	time.Sleep(1 * time.Second)
+}
+
+func DisplayNumber(number int) {
+	fmt.Println("Display", number)
+}
+
+func TestManyGoroutine(t *testing.T) {
+	for i := 0; i < 100000; i++ {
+		go DisplayNumber(i)
+	}
+	time.Sleep(10 * time.Second)
+}
+
+func TestCreateChannel(t *testing.T) {
+	channel := make(chan string)
+	go func() {
+		time.Sleep(2 * time.Second)
+		channel <- "Randy Wiratama"
+		fmt.Println("Selesai mengirim Data ke Channel")
+	}()
+
+	data := <-channel
+	fmt.Println(data)
+	time.Sleep(5 * time.Second)
+	defer close(channel)
+}
+
+func GiveMeResponse(channel chan string) {
+	time.Sleep(2 * time.Second)
+	channel <- "Randy Wiratama"
+}
+
+func TestChannelAsParameter(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	go GiveMeResponse(channel)
+
+	data := <-channel
+	fmt.Println(data)
+	time.Sleep(5 * time.Second)
+}
+
+func OnlyIn(channel chan<- string) {
+	time.Sleep(2 * time.Second)
+	channel <- "Randy Wiratama"
+}
+
+func OnlyOut(channel <-chan string) {
+	data := <-channel
+	fmt.Println(data)
+}
+
+func TestInOutChannel(t *testing.T) {
+	channel := make(chan string)
+	defer close(channel)
+
+	go OnlyIn(channel)
+	go OnlyOut(channel)
+	time.Sleep(5 * time.Second)
+}
+
+func TestBufferChannel(t *testing.T) {
+	channel := make(chan string, 3)
+	defer close(channel)
+
+	// Anonymous Function
+	go func() {
+		channel <- "Randy"
+		channel <- "Wiratama"
+		channel <- "Golang"
+	}()
+
+	go func() {
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+	}()
+	time.Sleep(2 * time.Second)
+}
+
+func TestRangeChannel(t *testing.T) {
+	channel := make(chan string)
+
+	// Anonymous Function
+	go func() {
+		for i := 0; i < 10; i++ {
+			channel <- "Perulangan ke" + strconv.Itoa(i)
+		}
+		close(channel)
+	}()
+
+	for data := range channel {
+		fmt.Println(data)
+	}
+	fmt.Println("Done")
+}
+
+func TestSelectChannel(t *testing.T) {
+	channel1 := make(chan string)
+	channel2 := make(chan string)
+	defer close(channel1)
+	defer close(channel2)
+
+	go GiveMeResponse(channel1)
+	go GiveMeResponse(channel2)
+
+	counter := 0
+	for {
+		select {
+		case data := <-channel1:
+			fmt.Println("Data dari Channel 1", data)
+			counter++
+		case data := <-channel2:
+			fmt.Println("Data dari Channel 2", data)
+			counter++
+		default:
+			fmt.Println("Menunggu Data")
+		}
+		if counter == 2 {
+			break
+		}
+	}
+}
+
+func TestDefaultSelect(t *testing.T) {
+
 }
