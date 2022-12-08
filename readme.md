@@ -3,12 +3,14 @@ Menggunakan perintah
 ```
 go mod init nama-module
 ```
+Membuat versi tag pada git
+```
+git tag v1.0.0
+```
+```
+git push origin v1.0.0
+```
 
-## Menambah Dependecy
-Menggunkan perintah :
-```
-go get nama-module
-```
 ## Menambahkan Modul untuk Assertions Test
 ```
 go get github.com/stretchr/testify

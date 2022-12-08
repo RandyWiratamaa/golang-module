@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/RandyWiratamaa/golang-module/entity"
+	"github.com/RandyWiratamaa/golang-module/v2/entity"
 	"github.com/stretchr/testify/mock"
 )
 

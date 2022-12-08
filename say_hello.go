@@ -1,5 +1,5 @@
 package say_hello
 
-func SayHello() string {
-	return "Hello ini Go-Lang Module"
+func SayHello(name string) string {
+	return "Hello " + name
 }

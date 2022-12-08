@@ -3,8 +3,8 @@ package service
 import (
 	"testing"
 
-	"github.com/RandyWiratamaa/golang-module/entity"
-	"github.com/RandyWiratamaa/golang-module/repository"
+	"github.com/RandyWiratamaa/golang-module/v2/entity"
+	"github.com/RandyWiratamaa/golang-module/v2/repository"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
