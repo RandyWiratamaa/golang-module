@@ -10,16 +10,25 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Membuat unit test
+/**
+* Membuat unit test
+**/
 
 func TestHelloWorld(t *testing.T) {
 	result := HelloWorld("Randy")
 
 	if result != "Hello Randy" {
-		//error
-		t.Fatal("result is not 'Hello Randy'")
+		/**
+		* Error
+		**/
+
+		// t.Fail()                                // Unit test error, proses akan tetap berjalan
+		// t.FailNow()                             // Unit test error, proses unit test akan langsung berhenti
+		// t.Error("Result is not 'Hello Randy' ") // Sama seperti Log Error, dan secara otomatis memanggil function t.Fail()
+		t.Fatal("result is not 'Hello Randy'") // Sama spt t.Error(), proses unit test akan langsung berhenti
 	}
-	fmt.Println("String ini tidak akan bisa diakses setelah 't.Fatal'")
+	fmt.Println("String ini bisa diakses setelah 't.Fail() dan t.Error()'")
+	fmt.Println("String ini tidak akan bisa diakses setelah 't.FailNow() dan t.Fatal()'")
 }
 
 func TestHelloWorldAssertion(t *testing.T) {
